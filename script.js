@@ -136,11 +136,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     fetchBubiaiWeather();
 
-    // 5. Interaktyvus Leaflet.js žemėlapis (Centras: 55.8575, 23.1345, mastelis: 14)
+    // 5. Interaktyvus Leaflet.js žemėlapis (Centras: 55.8570, 23.1340, mastelis: 14)
     const locations = [
         {
             title: "Bubių piliakalnis",
-            coords: [55.8569, 23.1278],
+            coords: [55.8568, 23.1278],
             category: "Istorinis paminklas",
             desc: "Bubių piliakalnis (Dubysos slėnio apžvalga ir istorinė Šiaulių žemės pilies vieta)"
         },
@@ -157,25 +157,19 @@ document.addEventListener("DOMContentLoaded", () => {
             desc: "Šiaulių r. Bubių mokykla (Dubysos g. / Šiaulių pl.)"
         },
         {
-            title: "Bubių dvaras",
-            coords: [55.8528, 23.1305],
-            category: "Architektūros paveldas ir viešbutis",
-            desc: "Bubių dvaro sodyba (Grafų Zubovų dvaras, viešbutis ir SPA)"
+            title: "Bubių dvaro sodyba",
+            coords: [55.8530, 23.1305],
+            category: "Architektūros paveldas",
+            desc: "Bubių dvaro sodyba (Grafų Zubovų dvaras, viešbutis ir parkas)"
         },
         {
-            title: "„Bubių bravoras“",
+            title: "Bubių bravoras",
             coords: [55.8532, 23.1312],
             category: "Kraftinė aludarystė",
             desc: "„Bubių bravoras“ (Vietinė kraftinio alaus darykla šalia dvaro)"
         },
         {
-            title: "UAB „Hidralteka“",
-            coords: [55.8595, 23.1408],
-            category: "Verslas ir pramonė",
-            desc: "UAB „Hidralteka“ (Hidraulikos sistemų įmonė, Šiaulių pl. 28)"
-        },
-        {
-            title: "„Šiaulių šamas“",
+            title: "Šiaulių šamas",
             coords: [55.8550, 23.1385],
             category: "Akvakultūros ūkis",
             desc: "„Šiaulių šamas“ (Afrikinių šamų ūkis Bubiuose)"
@@ -187,7 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!mapContainer || typeof L === "undefined") return;
 
         if (!leafletMap) {
-            leafletMap = L.map("bubiaiMap").setView([55.8575, 23.1345], 14);
+            leafletMap = L.map("bubiaiMap").setView([55.8570, 23.1340], 14);
 
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
                 maxZoom: 19,
