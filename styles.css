@@ -1144,26 +1144,62 @@ a:hover {
 /* ==========================================================================
    5 SKILTIS: Žemėlapis (Leaflet.js) ir Kontaktai
    ========================================================================== */
-.map-Selector-bar {
+.map-controls-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    margin-bottom: 1.75rem;
+}
+
+.map-filter-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.55rem;
-    justify-content: center;
-    margin-bottom: 1.75rem;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1.15rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.map-filter-row.trail-filter-row {
+    background: #f3f8f5;
+    border-color: rgba(27, 77, 62, 0.22);
+}
+
+.map-filter-label {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    min-width: 175px;
+}
+
+.map-filter-label.trail-label {
+    color: #1b4d3e;
+}
+
+.map-btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    flex: 1;
 }
 
 .map-pin-btn {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: 999px;
-    padding: 0.48rem 0.95rem;
+    padding: 0.42rem 0.88rem;
     font-family: inherit;
-    font-size: 0.88rem;
+    font-size: 0.84rem;
     font-weight: 700;
     color: var(--color-primary-dark);
     cursor: pointer;
     transition: all var(--transition);
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .map-pin-btn:hover,
@@ -1171,6 +1207,20 @@ a:hover {
     background: var(--color-primary);
     color: #ffffff;
     border-color: var(--color-primary);
+}
+
+.map-pin-btn.map-pin-trail {
+    background: #ffffff;
+    border-color: rgba(27, 77, 62, 0.28);
+    color: #1b4d3e;
+}
+
+.map-pin-btn.map-pin-trail:hover,
+.map-pin-btn.map-pin-trail.active {
+    background: #1b4d3e;
+    color: #ffffff;
+    border-color: #1b4d3e;
+    box-shadow: 0 2px 6px rgba(27, 77, 62, 0.25);
 }
 
 .map-contact-grid {
@@ -1371,6 +1421,16 @@ a:hover {
     .map-contact-grid,
     .two-col-grid {
         grid-template-columns: 1fr;
+    }
+
+    .map-filter-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.6rem;
+    }
+
+    .map-filter-label {
+        min-width: auto;
     }
 
     .video-gallery-grid {

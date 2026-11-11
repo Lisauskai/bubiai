@@ -568,18 +568,35 @@
                         <span class="section-tag">Interaktyvi navigacija ir ryšys</span>
                         <h2>Bubių žemėlapis ir kontaktai</h2>
                         <p class="section-intro">
-                            Spustelėkite ant žymeklio žemėlapyje arba pasirinkite objektą iš sąrašo, kad pamatytumėte tikslią jo vietą Bubiuose.
+                            Spustelėkite ant žymeklio žemėlapyje arba pasirinkite objektą ar pažintinį taką iš sąrašo, kad pamatytumėte tikslią jo vietą.
                         </p>
                     </div>
 
                     <!-- Greito pasirinkimo mygtukai žemėlapio žymekliams -->
-                    <div class="map-Selector-bar" aria-label="Greitas objektų pasirinkimas žemėlapyje">
-                        <button type="button" class="map-pin-btn active" data-marker-index="0">⛰️ Bubių piliakalnis</button>
-                        <button type="button" class="map-pin-btn" data-marker-index="1">🏖️ Bubių paplūdimys</button>
-                        <button type="button" class="map-pin-btn" data-marker-index="2">🏫 Bubių mokykla</button>
-                        <button type="button" class="map-pin-btn" data-marker-index="3">🏛️ Bubių dvaro sodyba</button>
-                        <button type="button" class="map-pin-btn" data-marker-index="4">🍺 Bubių bravoras</button>
-                        <button type="button" class="map-pin-btn" data-marker-index="5">🐟 Šiaulių šamas</button>
+                    <div class="map-controls-panel" aria-label="Greitas objektų ir pažintinių takų pasirinkimas žemėlapyje">
+                        <div class="map-filter-row">
+                            <span class="map-filter-label">📍 Miestelio objektai:</span>
+                            <div class="map-btn-group">
+                                <button type="button" class="map-pin-btn active" data-marker-index="0">⛰️ Bubių piliakalnis</button>
+                                <button type="button" class="map-pin-btn" data-marker-index="1">🏖️ Bubių paplūdimys</button>
+                                <button type="button" class="map-pin-btn" data-marker-index="2">🏫 Bubių mokykla</button>
+                                <button type="button" class="map-pin-btn" data-marker-index="3">🏛️ Bubių dvaro sodyba</button>
+                                <button type="button" class="map-pin-btn" data-marker-index="4">🍺 Bubių bravoras</button>
+                                <button type="button" class="map-pin-btn" data-marker-index="5">🐟 Šiaulių šamas</button>
+                            </div>
+                        </div>
+
+                        <div class="map-filter-row trail-filter-row">
+                            <span class="map-filter-label trail-label">🥾 Pažintinių takų pradžios:</span>
+                            <div class="map-btn-group">
+                                <button type="button" class="map-pin-btn map-pin-trail" data-marker-index="6">🌲 Juodlės pažintinis takas (Startas)</button>
+                                <button type="button" class="map-pin-btn map-pin-trail" data-marker-index="7">🌲 Vainagių pažintinis takas (Startas)</button>
+                                <button type="button" class="map-pin-btn map-pin-trail" data-marker-index="8">💧 Svilės šaltiniai ir takas</button>
+                                <button type="button" class="map-pin-btn map-pin-trail" data-marker-index="9">🌲 Targių ozų takas (Startas)</button>
+                                <button type="button" class="map-pin-btn map-pin-trail" data-marker-index="10">🌲 Pageluvio ežeryno takas (Startas)</button>
+                                <button type="button" class="map-pin-btn map-pin-trail" data-marker-index="11">🛶 Ventos-Dubysos perkasas</button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="map-contact-grid">

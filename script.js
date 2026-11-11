@@ -77,14 +77,16 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    tabTriggers.forEach((trigger) => {
-        trigger.addEventListener("click", (e) => {
+    // Skilčių atidarymas paspaudus bet kurį elementą su [data-tab-target]
+    document.addEventListener("click", (e) => {
+        const trigger = e.target.closest("[data-tab-target]");
+        if (trigger) {
             const targetTab = trigger.getAttribute("data-tab-target");
             if (targetTab) {
                 e.preventDefault();
                 switchTab(targetTab);
             }
-        });
+        }
     });
 
     // Patikrinti URL hash įkėlus puslapį
@@ -138,41 +140,91 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 5. Interaktyvus Leaflet.js žemėlapis (Centras: 55.8570, 23.1340, mastelis: 14)
     const locations = [
+        // 1-6: Miestelio objektai
         {
             title: "Bubių piliakalnis",
             coords: [55.8568, 23.1278],
             category: "Istorinis paminklas",
-            desc: "Bubių piliakalnis (Dubysos slėnio apžvalga ir istorinė Šiaulių žemės pilies vieta)"
+            desc: "Bubių piliakalnis (Dubysos slėnio apžvalga ir istorinė Šiaulių žemės pilies vieta)",
+            isTrail: false
         },
         {
             title: "Bubių paplūdimys",
             coords: [55.8647, 23.1360],
             category: "Poilsio ir maudynių zona",
-            desc: "Bubių paplūdimys (Pagrindinė Bubių tvenkinio maudykla, pontoninis lieptas ir poilsio zona)"
+            desc: "Bubių paplūdimys (Pagrindinė Bubių tvenkinio maudykla, pontoninis lieptas ir poilsio zona)",
+            isTrail: false
         },
         {
             title: "Bubių mokykla",
             coords: [55.8562, 23.1362],
             category: "Švietimas ir bendruomenė",
-            desc: "Šiaulių r. Bubių mokykla (Dubysos g. / Šiaulių pl.)"
+            desc: "Šiaulių r. Bubių mokykla (Dubysos g. / Šiaulių pl.)",
+            isTrail: false
         },
         {
             title: "Bubių dvaro sodyba",
             coords: [55.8530, 23.1305],
             category: "Architektūros paveldas",
-            desc: "Bubių dvaro sodyba (Grafų Zubovų dvaras, viešbutis ir parkas)"
+            desc: "Bubių dvaro sodyba (Grafų Zubovų dvaras, viešbutis ir parkas)",
+            isTrail: false
         },
         {
             title: "Bubių bravoras",
             coords: [55.8532, 23.1312],
             category: "Kraftinė aludarystė",
-            desc: "„Bubių bravoras“ (Vietinė kraftinio alaus darykla šalia dvaro)"
+            desc: "„Bubių bravoras“ (Vietinė kraftinio alaus darykla šalia dvaro)",
+            isTrail: false
         },
         {
             title: "Šiaulių šamas",
             coords: [55.8550, 23.1385],
             category: "Akvakultūros ūkis",
-            desc: "„Šiaulių šamas“ (Afrikinių šamų ūkis Bubiuose)"
+            desc: "„Šiaulių šamas“ (Afrikinių šamų ūkis Bubiuose)",
+            isTrail: false
+        },
+        // 7-12: Pažintinių takų pradžios (Kurtuvėnų reg. parkas)
+        {
+            title: "Juodlės pažintinis takas (Startas)",
+            coords: [55.8278, 23.0125],
+            category: "Pažintinio tako pradžia",
+            desc: "Juodlės pažintinio tako pradžia ir automobilių aikštelė prie Juodlės ežero (4,5 km žiedinis maršrutas). Daugiau informacijos ir video rasite „Lankytinos vietos ir Takai“ skiltyje.",
+            isTrail: true
+        },
+        {
+            title: "Vainagių pažintinis takas (Startas)",
+            coords: [55.7958, 22.9875],
+            category: "Pažintinio tako pradžia",
+            desc: "Vainagių pažintinio tako pradžia prie Vainagių ežero ir girininkijos (4,5 km miško takas). Daugiau informacijos ir video rasite „Lankytinos vietos ir Takai“ skiltyje.",
+            isTrail: true
+        },
+        {
+            title: "Svilės šaltiniai ir takas",
+            coords: [55.8015, 23.0335],
+            category: "Gamtos paminklas ir takas",
+            desc: "Svilės šaltinių pradžios vieta prie Šakos upelio (didžiausias Lietuvos šaltinynas). Daugiau informacijos ir video rasite „Lankytinos vietos ir Takai“ skiltyje.",
+            isTrail: true
+        },
+        {
+            title: "Targių ozų takas (Startas)",
+            coords: [55.8202, 23.0645],
+            category: "Pažintinio tako pradžia",
+            desc: "Targių ozų kraštovaizdžio tako pradžia prie Šventjonio (9,5 km vaizdingas maršrutas). Daugiau informacijos ir video rasite „Lankytinos vietos ir Takai“ skiltyje.",
+            isTrail: true
+        },
+        {
+            title: "Pageluvio ežeryno takas (Startas)",
+            coords: [55.8084, 23.0909],
+            category: "Pažintinio tako pradžia",
+            desc: "Pageluvio kraštovaizdžio tako pradžia prie Geluvos ežero (termokarstiniai ežerai ir ozo keteros). Daugiau informacijos ir video rasite „Lankytinos vietos ir Takai“ skiltyje.",
+            isTrail: true
+        },
+        {
+            title: "Ventos-Dubysos perkasas (Bubių istorinis takas)",
+            coords: [55.8523, 23.1340],
+            category: "Istorinis-pažintinis takas",
+            desc: "Istorinis XIX a. kanalo perkasas Bubiuose tarp Ventos ir Dubysos baseinų. Daugiau informacijos ir video rasite „Lankytinos vietos ir Takai“ skiltyje.",
+            isTrail: true
         }
     ];
 
@@ -189,13 +241,21 @@ document.addEventListener("DOMContentLoaded", () => {
             }).addTo(leafletMap);
 
             locations.forEach((loc, idx) => {
+                const trailNotice = loc.isTrail
+                    ? `<div style="margin-top:7px; padding-top:6px; border-top:1px dashed #cbd5e1; font-size:12px; color:#1b4d3e; font-weight:600;">
+                        🌲 Daugiau informacijos ir video rasite „Lankytinos vietos ir Takai“ skiltyje.
+                        <div style="margin-top:4px;"><a href="#vietos" data-tab-target="vietos" style="color:#0e5a3c; text-decoration:underline; font-weight:700;">Atidaryti takų aprašymus ir video →</a></div>
+                    </div>`
+                    : "";
+
                 const popupHtml = `
-                    <div style="min-width:220px; font-family:system-ui,sans-serif; line-height:1.45;">
+                    <div style="min-width:240px; font-family:system-ui,sans-serif; line-height:1.45;">
                         <span style="display:inline-block; font-size:11px; font-weight:700; color:#1b4d3e; background:#eef4f0; padding:2px 7px; border-radius:99px; margin-bottom:4px;">
                             ${loc.category}
                         </span>
                         <h4 style="margin:4px 0 6px; font-size:15px; color:#12352b;">${loc.title}</h4>
                         <p style="margin:0; font-size:13px; color:#374151;">${loc.desc}</p>
+                        ${trailNotice}
                     </div>
                 `;
                 const marker = L.marker(loc.coords).addTo(leafletMap).bindPopup(popupHtml);
@@ -228,7 +288,8 @@ document.addEventListener("DOMContentLoaded", () => {
             initOrRefreshMap();
             if (leafletMap && mapMarkers[idx]) {
                 const targetCoords = locations[idx].coords;
-                leafletMap.flyTo(targetCoords, 16, { duration: 0.7 });
+                const targetZoom = idx >= 6 ? 14 : 16;
+                leafletMap.flyTo(targetCoords, targetZoom, { duration: 0.8 });
                 mapMarkers[idx].openPopup();
             }
         });
