@@ -183,47 +183,68 @@ document.addEventListener("DOMContentLoaded", () => {
             desc: "„Šiaulių šamas“ (Afrikinių šamų ūkis Bubiuose)",
             isTrail: false
         },
-        // 7-12: Pažintinių takų pradžios (Kurtuvėnų reg. parkas)
+        // 7-15: Pažintinių takų pradžios (Kurtuvėnų reg. parkas)
+        {
+            title: "„Šalia dvaro“ takai (Startas)",
+            coords: [55.826093, 23.048426],
+            category: "Pažintinio tako pradžia",
+            desc: "Kurtuvėnų dvaro parko ir apylinkių pažintinių takų pradžios vieta.",
+            isTrail: true
+        },
+        {
+            title: "Svilės kraštovaizdžio takas (Startas)",
+            coords: [55.839828, 22.942569],
+            category: "Pažintinio tako pradžia",
+            desc: "Svilės kraštovaizdžio tako pradžia prie Svilės šaltinių ir žemapelkės.",
+            isTrail: true
+        },
         {
             title: "Juodlės pažintinis takas (Startas)",
-            coords: [55.8278, 23.0125],
+            coords: [55.818028, 22.924126],
             category: "Pažintinio tako pradžia",
-            desc: "Juodlės pažintinio tako pradžia ir automobilių aikštelė prie Juodlės ežero (4,5 km žiedinis maršrutas). Daugiau informacijos ir video rasite „Lankytinos vietos ir Takai“ skiltyje.",
+            desc: "Juodlės pažintinio tako pradžia ir poilsiavietė prie Juodlės ežero.",
             isTrail: true
         },
         {
-            title: "Vainagių pažintinis takas (Startas)",
-            coords: [55.7958, 22.9875],
+            title: "Vainagių miško pažintinis takas (Startas)",
+            coords: [55.804118, 22.994006],
             category: "Pažintinio tako pradžia",
-            desc: "Vainagių pažintinio tako pradžia prie Vainagių ežero ir girininkijos (4,5 km miško takas). Daugiau informacijos ir video rasite „Lankytinos vietos ir Takai“ skiltyje.",
+            desc: "Vainagių miško pažintinio tako pradžia prie Vainagių ežero ir girininkijos.",
             isTrail: true
         },
         {
-            title: "Svilės šaltiniai ir takas",
-            coords: [55.8015, 23.0335],
-            category: "Gamtos paminklas ir takas",
-            desc: "Svilės šaltinių pradžios vieta prie Šakos upelio (didžiausias Lietuvos šaltinynas). Daugiau informacijos ir video rasite „Lankytinos vietos ir Takai“ skiltyje.",
+            title: "Bubių istorinis takas (Startas)",
+            coords: [55.848634, 23.126620],
+            category: "Istorinis-pažintinis takas",
+            desc: "Bubių istorinio tako ir Ventos–Dubysos perkaso pradžios vieta Bubiuose.",
+            isTrail: true
+        },
+        {
+            title: "Pageluvio ežeryno takai (Startas)",
+            coords: [55.797760, 23.103825],
+            category: "Pažintinio tako pradžia",
+            desc: "Pageluvio ežeryno takų pradžia prie Geluvos ežero ir Barsukyno ozo.",
             isTrail: true
         },
         {
             title: "Targių ozų takas (Startas)",
-            coords: [55.8202, 23.0645],
+            coords: [55.752967, 22.979436],
             category: "Pažintinio tako pradžia",
-            desc: "Targių ozų kraštovaizdžio tako pradžia prie Šventjonio (9,5 km vaizdingas maršrutas). Daugiau informacijos ir video rasite „Lankytinos vietos ir Takai“ skiltyje.",
+            desc: "Targių ozų kraštovaizdžio tako pradžia prie Šventjonio miško.",
             isTrail: true
         },
         {
-            title: "Pageluvio ežeryno takas (Startas)",
-            coords: [55.8084, 23.0909],
+            title: "Pustlaukio duobių takas (Startas)",
+            coords: [55.807853, 22.970293],
             category: "Pažintinio tako pradžia",
-            desc: "Pageluvio kraštovaizdžio tako pradžia prie Geluvos ežero (termokarstiniai ežerai ir ozo keteros). Daugiau informacijos ir video rasite „Lankytinos vietos ir Takai“ skiltyje.",
+            desc: "Pustlaukio geomorfologinių termokarstinių duobių tako pradžios vieta.",
             isTrail: true
         },
         {
-            title: "Ventos-Dubysos perkasas (Bubių istorinis takas)",
-            coords: [55.8523, 23.1340],
-            category: "Istorinis-pažintinis takas",
-            desc: "Istorinis XIX a. kanalo perkasas Bubiuose tarp Ventos ir Dubysos baseinų. Daugiau informacijos ir video rasite „Lankytinos vietos ir Takai“ skiltyje.",
+            title: "Smirdėlės pelkių takas (Startas)",
+            coords: [55.799573, 23.028290],
+            category: "Pažintinio tako pradžia",
+            desc: "Smirdėlės gamtinio pažintinio tako pradžia prie pelkių ir šaltiniuoto upelio.",
             isTrail: true
         }
     ];
