@@ -14,7 +14,7 @@ const bubiaiLocations = [
     // 1-6: Miestelio objektai
     {
         title: "Bubių piliakalnis",
-        coords: [55.8568, 23.1278],
+        coords: [55.86191674603082, 23.130694252141637],
         category: "Istorinis paminklas",
         desc: "Bubių piliakalnis (Dubysos slėnio apžvalga ir istorinė Šiaulių žemės pilies vieta)",
         isTrail: false
