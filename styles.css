@@ -707,6 +707,42 @@ a:hover {
     font-size: 0.95rem;
 }
 
+.place-card-with-img {
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.place-card-with-img .card-img-wrap {
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+}
+
+.place-card-with-img .card-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition);
+}
+
+.place-card-with-img:hover .card-img-wrap img {
+    transform: scale(1.03);
+}
+
+.place-card-with-img .card-content {
+    padding: 1.85rem;
+}
+
+.place-card-with-img .card-content p {
+    margin-bottom: 0.85rem;
+}
+
+.place-card-with-img .card-content p:last-child {
+    margin-bottom: 0;
+}
+
 /* Kurtuvėnų pažintinių takų blokas */
 .trails-block {
     background: var(--color-surface-alt);
@@ -763,7 +799,7 @@ a:hover {
     color: var(--color-text-muted);
 }
 
-/* Išorinių nuorodų reklamjuostė (map.lisauskai.lt / lisauskai.lt) */
+/* Išorinių nuorodų reklamjuostė (Kurtuvėnų regioninio parko takai) */
 .external-highlight-banner {
     background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-lake) 100%);
     color: #ffffff;

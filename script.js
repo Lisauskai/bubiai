@@ -136,49 +136,49 @@ document.addEventListener("DOMContentLoaded", () => {
 
     fetchBubiaiWeather();
 
-    // 5. Interaktyvus Leaflet.js žemėlapis (Bubiai: 55.858, 23.133)
+    // 5. Interaktyvus Leaflet.js žemėlapis (Centras: 55.8575, 23.1345, mastelis: 14)
     const locations = [
         {
-            title: "Bubių piliakalnis (Pilalė)",
-            coords: [55.8536, 23.1269],
+            title: "Bubių piliakalnis",
+            coords: [55.8569, 23.1278],
             category: "Istorinis paminklas",
-            desc: "XIII–XIV a. Dubysos pilies vieta, susijusi su 1236 m. Saulės mūšiu. Panoraminė apžvalgos aikštelė."
+            desc: "Bubių piliakalnis (Dubysos slėnio apžvalga ir istorinė Šiaulių žemės pilies vieta)"
         },
         {
-            title: "Bubių paplūdimys (Bubių tvenkinys)",
-            coords: [55.8498, 23.1295],
+            title: "Bubių paplūdimys",
+            coords: [55.8647, 23.1360],
             category: "Poilsio ir maudynių zona",
-            desc: "Atnaujintas „Bubių jūros“ paplūdimys su nauju pontoniniu lieptu, saulės LED apšvietimu ir sporto aikštelėmis."
+            desc: "Bubių paplūdimys (Pagrindinė Bubių tvenkinio maudykla, pontoninis lieptas ir poilsio zona)"
         },
         {
             title: "Bubių mokykla",
-            coords: [55.8576, 23.1345],
+            coords: [55.8562, 23.1362],
             category: "Švietimas ir bendruomenė",
-            desc: "Šiaulių r. Bubių mokykla, biblioteka ir bendruomenės kultūrinių renginių erdvė."
+            desc: "Šiaulių r. Bubių mokykla (Dubysos g. / Šiaulių pl.)"
         },
         {
-            title: "Bubių dvaras („Grafo Zubovo“)",
-            coords: [55.8583, 23.1282],
+            title: "Bubių dvaras",
+            coords: [55.8528, 23.1305],
             category: "Architektūros paveldas ir viešbutis",
-            desc: "Restauruota XIX a. grafų Zubovų dvaro sodyba, viešbutis, restoranas ir SPA kompleksas (Dubysos g. 1C)."
-        },
-        {
-            title: "UAB „Hidralteka“",
-            coords: [55.8602, 23.1388],
-            category: "Verslas ir pramonė",
-            desc: "Hidraulinės įrangos, manipuliatorių ir kranų gamyba, remontas bei metalo apdirbimas (Gluosnių g. 1, Bubiai)."
+            desc: "Bubių dvaro sodyba (Grafų Zubovų dvaras, viešbutis ir SPA)"
         },
         {
             title: "„Bubių bravoras“",
-            coords: [55.8587, 23.1275],
-            category: "Kraftinė aludarystė ir edukacijos",
-            desc: "Bubių dvaro bravoras – kraftinio alaus gamyba, degustacijos ir pažintinės programos (Dubysos g. 1D, Bubiai)."
+            coords: [55.8532, 23.1312],
+            category: "Kraftinė aludarystė",
+            desc: "„Bubių bravoras“ (Vietinė kraftinio alaus darykla šalia dvaro)"
+        },
+        {
+            title: "UAB „Hidralteka“",
+            coords: [55.8595, 23.1408],
+            category: "Verslas ir pramonė",
+            desc: "UAB „Hidralteka“ (Hidraulikos sistemų įmonė, Šiaulių pl. 28)"
         },
         {
             title: "„Šiaulių šamas“",
-            coords: [55.8615, 23.1422],
+            coords: [55.8550, 23.1385],
             category: "Akvakultūros ūkis",
-            desc: "Afrikinių šamų auginimo ūkis bei šviežios ir rūkytos žuvies produkcija (Gluosnių g. 27, Bubiai)."
+            desc: "„Šiaulių šamas“ (Afrikinių šamų ūkis Bubiuose)"
         }
     ];
 
@@ -187,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!mapContainer || typeof L === "undefined") return;
 
         if (!leafletMap) {
-            leafletMap = L.map("bubiaiMap").setView([55.858, 23.133], 14);
+            leafletMap = L.map("bubiaiMap").setView([55.8575, 23.1345], 14);
 
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
                 maxZoom: 19,
@@ -196,7 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             locations.forEach((loc, idx) => {
                 const popupHtml = `
-                    <div style="min-width:210px; font-family:system-ui,sans-serif; line-height:1.45;">
+                    <div style="min-width:220px; font-family:system-ui,sans-serif; line-height:1.45;">
                         <span style="display:inline-block; font-size:11px; font-weight:700; color:#1b4d3e; background:#eef4f0; padding:2px 7px; border-radius:99px; margin-bottom:4px;">
                             ${loc.category}
                         </span>
@@ -206,6 +206,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 `;
                 const marker = L.marker(loc.coords).addTo(leafletMap).bindPopup(popupHtml);
                 mapMarkers.push(marker);
+
+                marker.on("click", () => {
+                    pinButtons.forEach((b) => b.classList.remove("active"));
+                    if (pinButtons[idx]) pinButtons[idx].classList.add("active");
+                });
 
                 if (idx === 0) {
                     marker.openPopup();
@@ -229,7 +234,7 @@ document.addEventListener("DOMContentLoaded", () => {
             initOrRefreshMap();
             if (leafletMap && mapMarkers[idx]) {
                 const targetCoords = locations[idx].coords;
-                leafletMap.flyTo(targetCoords, 16, { duration: 0.6 });
+                leafletMap.flyTo(targetCoords, 16, { duration: 0.7 });
                 mapMarkers[idx].openPopup();
             }
         });
