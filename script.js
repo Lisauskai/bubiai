@@ -164,21 +164,21 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         {
             title: "Bubių dvaro sodyba",
-            coords: [55.8530, 23.1305],
+            coords: [55.856309960305694, 23.137114295601748],
             category: "Architektūros paveldas",
             desc: "Bubių dvaro sodyba (Grafų Zubovų dvaras, viešbutis ir parkas)",
             isTrail: false
         },
         {
             title: "Bubių bravoras",
-            coords: [55.8532, 23.1312],
+            coords: [55.85664780818139, 23.13836183904464],
             category: "Kraftinė aludarystė",
             desc: "„Bubių bravoras“ (Vietinė kraftinio alaus darykla šalia dvaro)",
             isTrail: false
         },
         {
             title: "Šiaulių šamas",
-            coords: [55.8550, 23.1385],
+            coords: [55.862205127656495, 23.149591167708433],
             category: "Akvakultūros ūkis",
             desc: "„Šiaulių šamas“ (Afrikinių šamų ūkis Bubiuose)",
             isTrail: false
