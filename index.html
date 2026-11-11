@@ -3,333 +3,628 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bubiai – Istorija, gamta ir bendruomenė | bubiai.eu</title>
-    <meta name="description" content="Oficiali Bubių bendruomenės ir krašto svetainė. Sužinokite apie Bubių istoriją, Bubių piliakalnį (Pilalę), Bubių tvenkinį (Šiaulių jūrą) ir vietos bendruomenės gyvenimą.">
-    <meta name="keywords" content="Bubiai, Bubių piliakalnis, Bubių tvenkinys, Šiaulių jūra, Bubių bendruomenė, Dubysos pilis, Bubių dvaras, Kurtuvėnų regioninis parkas, Šiaulių rajonas">
+    <title>Bubiai – Istorija, verslas, gamta ir bendruomenė | bubiai.eu</title>
+    <meta name="description" content="Oficialus Bubių miestelio ir bendruomenės portalas. Lankytinos vietos, pažintiniai takai, vietos verslas (Hidralteka, Bubių bravoras, Šiaulių šamas), Bubių seniūnijos projektai, mokykla ir interaktyvus žemėlapis.">
+    <meta name="keywords" content="Bubiai, Bubių piliakalnis, Bubių tvenkinys, Šiaulių jūra, Bubių seniūnija, Bubių mokykla, Hidralteka, Bubių bravoras, Šiaulių šamas, Kurtuvėnų regioninis parkas">
     <meta name="author" content="Bubių bendruomenė">
-    <meta property="og:title" content="Bubiai – Istorija, gamta ir bendruomenė | bubiai.eu">
-    <meta property="og:description" content="Atraskite Bubius – kraštą, kuriame susitinka baltų kovų istorija, Dubysos slėniai, Bubių tvenkinys ir gyvybinga bendruomenė.">
+    <meta property="og:title" content="Bubiai – Istorija, verslas, gamta ir bendruomenė | bubiai.eu">
+    <meta property="og:description" content="Atraskite Bubius: lankytinos vietos, Kurtuvėnų regioninio parko pažintiniai takai, vietos verslas, seniūnijos projektai ir interaktyvus žemėlapis.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://bubiai.eu">
     <meta property="og:locale" content="lt_LT">
     <link rel="icon" type="image/png" href="images/bubiai-herbas.png">
+    <!-- Leaflet.js CSS interaktyviam žemėlapiui -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <a class="skip-link" href="#pagrindinis-turinys">Pereiti prie pagrindinio turinio</a>
 
-    <!-- Navigacija -->
+    <!-- Lipni viršutinė navigacijos juosta su SPA skiltimis ir orų valdikliu -->
     <header class="site-header" id="virsus">
         <div class="container nav-container">
-            <a href="#virsus" class="brand" aria-label="Bubių pradžios puslapis">
-                <img src="images/bubiai-herbas.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/d/db/Bubiai_COA.png'" alt="Bubių miestelio herbas" class="brand-logo" width="40" height="48">
+            <a href="#pradzia" class="brand" data-tab-target="pradzia" aria-label="Bubių pradžios skiltis">
+                <img src="images/bubiai-herbas.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/d/db/Bubiai_COA.png'" alt="Bubių miestelio herbas" class="brand-logo" width="38" height="46">
                 <div class="brand-text">
                     <span class="brand-title">Bubiai</span>
-                    <span class="brand-subtitle">Šiaulių rajonas</span>
+                    <span class="brand-subtitle">bubiai.eu • Šiaulių r.</span>
                 </div>
             </a>
 
-            <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mainNav" aria-label="Atidaryti arba uždaryti meniu">
+            <!-- Gyvas orų valdiklis viršutinėje juostoje / Hero -->
+            <div class="weather-badge" id="weatherWidget" aria-live="polite" title="Tiesioginiai orų duomenys prie Bubių tvenkinio">
+                <span class="weather-icon" id="weatherIcon" aria-hidden="true">🌤️</span>
+                <div class="weather-info">
+                    <span class="weather-label">Orai prie Bubių jūros dabar</span>
+                    <span class="weather-values" id="weatherValues">Kraunami duomenys...</span>
+                </div>
+            </div>
+
+            <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mainNav" aria-label="Atidaryti arba uždaryti navigacijos meniu">
                 <span class="menu-bar"></span>
                 <span class="menu-bar"></span>
                 <span class="menu-bar"></span>
             </button>
 
-            <nav class="main-nav" id="mainNav" aria-label="Pagrindinė svetainės navigacija">
-                <ul class="nav-list">
-                    <li><a href="#apie-bubius" class="nav-link">Apie Bubius</a></li>
-                    <li><a href="#lankytinos-vietos" class="nav-link">Lankytinos vietos</a></li>
-                    <li><a href="#bendruomene" class="nav-link">Bendruomenė</a></li>
-                    <li><a href="#kontaktai" class="nav-link nav-cta">Informacija</a></li>
+            <nav class="main-nav" id="mainNav" aria-label="Pagrindinės svetainės skiltys">
+                <ul class="nav-list" role="tablist">
+                    <li role="presentation">
+                        <button type="button" role="tab" id="tab-btn-pradzia" aria-controls="view-pradzia" aria-selected="true" class="nav-tab active" data-tab="pradzia">
+                            Pradžia ir Apie
+                        </button>
+                    </li>
+                    <li role="presentation">
+                        <button type="button" role="tab" id="tab-btn-vietos" aria-controls="view-vietos" aria-selected="false" class="nav-tab" data-tab="vietos">
+                            Lankytinos vietos ir Takai
+                        </button>
+                    </li>
+                    <li role="presentation">
+                        <button type="button" role="tab" id="tab-btn-verslas" aria-controls="view-verslas" aria-selected="false" class="nav-tab" data-tab="verslas">
+                            Verslas ir Pramonė
+                        </button>
+                    </li>
+                    <li role="presentation">
+                        <button type="button" role="tab" id="tab-btn-seniunija" aria-controls="view-seniunija" aria-selected="false" class="nav-tab" data-tab="seniunija">
+                            Seniūnija ir Mokykla
+                        </button>
+                    </li>
+                    <li role="presentation">
+                        <button type="button" role="tab" id="tab-btn-zemelapis" aria-controls="view-zemelapis" aria-selected="false" class="nav-tab nav-tab-cta" data-tab="zemelapis">
+                            Žemėlapis ir Kontaktai
+                        </button>
+                    </li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <main id="pagrindinis-turinys">
-        <!-- Pagrindinis ekranas (Hero) -->
-        <section class="hero" aria-labelledby="hero-antraste">
-            <div class="hero-overlay"></div>
-            <div class="container hero-content">
-                <span class="hero-badge">Kurtuvėnų regioninio parko vartai • 14 km nuo Šiaulių</span>
-                <h1 id="hero-antraste">Bubiai – kur susitinka didinga baltų istorija, Dubysos slėniai ir gyvybinga bendruomenė</h1>
-                <p class="hero-lead">
-                    Sveiki atvykę į Bubius – vaizdingą Šiaulių rajono gyvenvietę ir seniūnijos centrą. Čia dera tūkstantmetę praeitį menantis Bubių piliakalnis, plati „Bubių jūra“ ir aktyvi, savo kraštą puoselėjanti vietos bendruomenė.
-                </p>
-                <div class="hero-actions">
-                    <a href="#lankytinos-vietos" class="btn btn-primary">Atrasti lankytinas vietas</a>
-                    <a href="#apie-bubius" class="btn btn-secondary">Pažinti istoriją</a>
-                </div>
+    <main id="pagrindinis-turinys" class="spa-main">
+        <!-- ==================================================================
+             1 SKILTIS: PRADŽIA IR APIE
+             ================================================================== -->
+        <section id="view-pradzia" class="tab-view active" role="tabpanel" aria-labelledby="tab-btn-pradzia">
+            <div class="hero">
+                <div class="container hero-content">
+                    <div class="hero-top-row">
+                        <span class="hero-badge">Kurtuvėnų regioninio parko vartai • 14 km nuo Šiaulių</span>
+                        <div class="hero-weather-pill" id="heroWeatherPill">
+                            <span>🌊 Orai prie Bubių jūros dabar:</span>
+                            <strong id="heroWeatherText">Kraunama...</strong>
+                        </div>
+                    </div>
 
-                <div class="hero-stats" aria-label="Svarbiausi faktai apie Bubius">
-                    <div class="stat-item">
-                        <span class="stat-value">V a.</span>
-                        <span class="stat-label">Pirmieji gyventojai</span>
+                    <h1>Bubiai – kur susitinka didinga baltų istorija, Dubysos slėniai ir gyvybinga bendruomenė</h1>
+                    <p class="hero-lead">
+                        Sveiki atvykę į atnaujintą Bubių krašto ir bendruomenės portalą. Pasirinkite dominančią skiltį ir atraskite tūkstantmetį Bubių piliakalnį, „Bubių jūrą“, gretimus Kurtuvėnų pažintinius takus, vietos verslą bei seniūnijos aktualijas.
+                    </p>
+
+                    <div class="hero-actions">
+                        <button type="button" class="btn btn-primary" data-tab-target="vietos">Lankytinos vietos ir takai</button>
+                        <button type="button" class="btn btn-secondary" data-tab-target="verslas">Vietos verslas ir pramonė</button>
+                        <button type="button" class="btn btn-secondary" data-tab-target="zemelapis">Interaktyvus žemėlapis</button>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-value">1236 m.</span>
-                        <span class="stat-label">Dubysos pilis ir Saulės mūšis</span>
+
+                    <div class="hero-stats" aria-label="Svarbiausi faktai apie Bubius">
+                        <div class="stat-item">
+                            <span class="stat-value">V a.</span>
+                            <span class="stat-label">Pirmieji gyventojai</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">1236 m.</span>
+                            <span class="stat-label">Dubysos pilis ir Saulės mūšis</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">422 ha</span>
+                            <span class="stat-label">Bubių tvenkinio plotas</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">~800</span>
+                            <span class="stat-label">Gyvenvietės gyventojų</span>
+                        </div>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-value">422 ha</span>
-                        <span class="stat-label">Bubių tvenkinio plotas</span>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <span class="section-tag">Mūsų šaknys</span>
+                        <h2>Apie Bubius ir mūsų istoriją</h2>
+                        <p class="section-intro">
+                            Nuo senovės baltų gynybinės tvirtovės iki grafų Zubovų kultūros židinio ir šiuolaikinės seniūnijos centro.
+                        </p>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-value">~800</span>
-                        <span class="stat-label">Gyvenvietės gyventojų</span>
+
+                    <div class="about-grid">
+                        <div class="about-text">
+                            <h3>Šimtmečius menanti Bubių praeitis</h3>
+                            <p>
+                                Bubių žemė saugo vienus seniausių ir reikšmingiausių Šiaulių krašto istorijos puslapių. Archeologiniai tyrinėjimai liudija, kad žmonės Dubysos aukštupio slėniuose kūrėsi jau V–VI amžiuje. Viduramžiais čia klestėjo gyvenvietė, kurią gynė galinga medinė <strong>Dubysos pilis</strong> (vokiečių kronikose vadinta <em>Dobitzen</em>), tapusi tvirtu skydu kovose su Livonijos ir Kryžiuočių ordinais.
+                            </p>
+                            <p>
+                                XIX amžiuje Bubiai tapo ambicingų inžinerinių ir kultūrinių permainų liudininkais. Šalia gyvenvietės 1825 m. buvo pradėtas kasti strateginis <strong>Ventos–Dubysos kanalas (perkasas)</strong>, turėjęs sujungti Baltijos ir Juodąją jūras. Iki šių dienų išlikęs kanalo žiemos uostas ir pylimai yra unikalus technikos paveldo paminklas.
+                            </p>
+                            <p>
+                                Ypatingą aurą miesteliui suteikė <strong>Bubių dvaras</strong>, kurį nuo XVIII a. pabaigos valdė grafų Zubovų giminė. Grafų Dmitrijaus ir Vladimiro Zubovų dėka XIX a. pabaigoje – XX a. pradžioje Bubiai tapo tikru lietuvybės, švietimo ir kultūros židiniu. Dvare veikė slapta, o vėliau ir oficiali lietuviška mokykla, iškilo pirmasis Lietuvoje siloso bokštas, o garsiosiose Bubių gegužinėse rinkdavosi Lietuvos šviesuoliai – Povilas Višinskis, Jonas Biliūnas, Žemaitė ir Gabrielė Petkevičaitė-Bitė.
+                            </p>
+
+                            <div class="timeline" aria-label="Svarbiausios Bubių istorijos datos">
+                                <div class="timeline-item">
+                                    <span class="timeline-year">V–XIV a.</span>
+                                    <p>Senovės baltų gyvenvietė ir Dubysos pilis ant Bubių piliakalnio (Pilalės).</p>
+                                </div>
+                                <div class="timeline-item">
+                                    <span class="timeline-year">1825 m.</span>
+                                    <p>Pradėtas kasti Ventos–Dubysos perkasas ir įrengtas laivų žiemos uostas.</p>
+                                </div>
+                                <div class="timeline-item">
+                                    <span class="timeline-year">XIX a. pab.</span>
+                                    <p>Grafų Zubovų dvare suklesti lietuviška mokykla ir tautinio atgimimo gegužinės.</p>
+                                </div>
+                                <div class="timeline-item">
+                                    <span class="timeline-year">1973 m.</span>
+                                    <p>Užtvenkus Dubysą suformuojamas 422 ha Bubių tvenkinys („Bubių jūra“).</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="about-visual">
+                            <figure class="schema-card">
+                                <img src="images/bubiai-schema.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/5/5b/BubiaiSchema1.png'" alt="Bubių gyvenvietės, piliakalnio, tvenkinio ir Ventos–Dubysos kanalo istorinė išsidėstymo schema">
+                                <figcaption>
+                                    <strong>Bubių kraštovaizdžio schema:</strong> Dubysos slėnis, Bubių piliakalnis, tvenkinys ir XIX a. Ventos–Dubysos kanalo trasa (aut. R. Lazdynas, viešasis domenas).
+                                </figcaption>
+                            </figure>
+
+                            <div class="quick-nav-cards">
+                                <button type="button" class="quick-card" data-tab-target="vietos">
+                                    <span class="quick-card-icon">🥾</span>
+                                    <div>
+                                        <strong>Lankytinos vietos ir Takai</strong>
+                                        <span>Piliakalnis, tvenkinys, dvaras ir Kurtuvėnų takai →</span>
+                                    </div>
+                                </button>
+                                <button type="button" class="quick-card" data-tab-target="verslas">
+                                    <span class="quick-card-icon">🏭</span>
+                                    <div>
+                                        <strong>Verslas ir Pramonė</strong>
+                                        <span>Hidralteka, Bubių bravoras, Šiaulių šamas ir kt. →</span>
+                                    </div>
+                                </button>
+                                <button type="button" class="quick-card" data-tab-target="seniunija">
+                                    <span class="quick-card-icon">🏫</span>
+                                    <div>
+                                        <strong>Seniūnija ir Mokykla</strong>
+                                        <span>Infrastruktūros projektai, paplūdimys ir renginiai →</span>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Sekcija: Apie Bubius -->
-        <section id="apie-bubius" class="section section-about">
-            <div class="container">
-                <div class="section-header">
-                    <span class="section-tag">Mūsų šaknys</span>
-                    <h2>Apie Bubius</h2>
-                    <p class="section-intro">
-                        Nuo senovės baltų gynybinės tvirtovės iki grafų Zubovų kultūros židinio ir šiuolaikinės seniūnijos centro.
-                    </p>
-                </div>
-
-                <div class="about-grid">
-                    <div class="about-text">
-                        <h3>Šimtmečius menanti Bubių praeitis</h3>
-                        <p>
-                            Bubių žemė saugo vienus seniausių ir reikšmingiausių Šiaulių krašto istorijos puslapių. Archeologiniai tyrinėjimai liudija, kad žmonės Dubysos aukštupio slėniuose kūrėsi jau V–VI amžiuje. Viduramžiais čia klestėjo gyvenvietė, kurią gynė galinga medinė <strong>Dubysos pilis</strong>, tapusi tvirtu skydu kovose su Livonijos ir Kryžiuočių ordinais.
+        <!-- ==================================================================
+             2 SKILTIS: LANKYTINOS VIETOS IR TAKAI
+             ================================================================== -->
+        <section id="view-vietos" class="tab-view" role="tabpanel" aria-labelledby="tab-btn-vietos" hidden>
+            <div class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <span class="section-tag">Paveldas, vanduo ir gamta</span>
+                        <h2>Lankytinos vietos ir pažintiniai takai</h2>
+                        <p class="section-intro">
+                            Pažinkite Bubių istorinius paminklus, „Bubių jūrą“ ir čia pat prasidedančius Kurtuvėnų regioninio parko gamtos maršrutus.
                         </p>
-                        <p>
-                            XIX amžiuje Bubiai tapo ambicingų inžinerinių ir kultūrinių permainų liudininkais. Šalia gyvenvietės 1825 m. buvo pradėtas kasti strateginis <strong>Ventos–Dubysos kanalas (perkasas)</strong>, turėjęs sujungti Baltijos ir Juodąją jūras. Iki šių dienų išlikęs kanalo žiemos uostas ir pylimai yra unikalus technikos paveldo paminklas.
-                        </p>
-                        <p>
-                            Ypatingą aurą miesteliui suteikė <strong>Bubių dvaras</strong>, kurį nuo XVIII a. pabaigos valdė grafų Zubovų giminė. Grafų Dmitrijaus ir Vladimiro Zubovų dėka XIX a. pabaigoje – XX a. pradžioje Bubiai tapo tikru lietuvybės, švietimo ir kultūros židiniu. Dvare veikė slapta, o vėliau ir oficiali lietuviška mokykla, iškilo pirmasis Lietuvoje siloso bokštas, o garsiosiose Bubių gegužinėse rinkdavosi Lietuvos šviesuoliai – Povilas Višinskis, Jonas Biliūnas, Žemaitė ir Gabrielė Petkevičaitė-Bitė.
-                        </p>
-
-                        <div class="timeline" aria-label="Svarbiausios Bubių istorijos datos">
-                            <div class="timeline-item">
-                                <span class="timeline-year">V–XIV a.</span>
-                                <p>Senovės baltų gyvenvietė ir Dubysos pilis (*Dobitzen*) ant Bubių piliakalnio.</p>
-                            </div>
-                            <div class="timeline-item">
-                                <span class="timeline-year">1825 m.</span>
-                                <p>Pradėtas kasti Ventos–Dubysos perkasas ir įrengtas laivų žiemos uostas.</p>
-                            </div>
-                            <div class="timeline-item">
-                                <span class="timeline-year">XIX a. pab.</span>
-                                <p>Grafų Zubovų dvare suklesti lietuviška mokykla ir tautinio atgimimo gegužinės.</p>
-                            </div>
-                            <div class="timeline-item">
-                                <span class="timeline-year">1973 m.</span>
-                                <p>Užtvenkus Dubysą suformuojamas Bubių tvenkinys („Šiaulių jūra“).</p>
-                            </div>
-                        </div>
                     </div>
 
-                    <div class="about-visual">
-                        <figure class="schema-card">
-                            <img src="images/bubiai-schema.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/5/5b/BubiaiSchema1.png'" alt="Bubių gyvenvietės, piliakalnio, tvenkinio ir Ventos–Dubysos kanalo istorinė išsidėstymo schema" loading="lazy">
-                            <figcaption>
-                                <strong>Bubių kraštovaizdžio schema:</strong> Dubysos slėnis, Bubių piliakalnis, tvenkinys ir XIX a. Ventos–Dubysos kanalo trasa (aut. R. Lazdynas, viešasis domenas).
-                            </figcaption>
-                        </figure>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Sekcija: Lankytinos vietos -->
-        <section id="lankytinos-vietos" class="section section-places">
-            <div class="container">
-                <div class="section-header">
-                    <span class="section-tag">Paveldas ir gamta</span>
-                    <h2>Lankytinos vietos</h2>
-                    <p class="section-intro">
-                        Atraskite unikalius archeologijos, gamtos ir architektūros paminklus, įsikūrusius Bubių apylinkėse.
-                    </p>
-                </div>
-
-                <!-- Pagrindiniai 2 objektai su nuotraukomis -->
-                <div class="featured-places">
-                    <!-- 1. Bubių piliakalnis -->
-                    <article class="place-feature">
-                        <div class="place-image-wrap">
-                            <img src="images/bubiu-piliakalnis.jpg" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/d/d4/Bubiu_piliakalnis.jpg'" alt="Bubių piliakalnis (Pilalė) su stačiais žaliais šlaitais Šiaulių rajone" loading="lazy">
-                            <span class="place-badge">Archeologijos paminklas</span>
-                        </div>
-                        <div class="place-body">
-                            <h3>Bubių piliakalnis (Pilalė)</h3>
-                            <p>
-                                Dubysos kairiojo kranto aukštumos kyšulyje stūksantis <strong>Bubių piliakalnis</strong> (vietinių vadinamas <em>Pilale</em>) – vienas svarbiausių Šiaulių žemės gynybinių paminklų. Apie 14 metrų aukščio stačiais šlaitais ir pylimais apjuostas kalnas XIII–XIV a. laikė garsiąją <strong>Dubysos pilį</strong>.
-                            </p>
-                            <p>
-                                Istorikai šią tvirtovę tiesiogiai sieja su pergalingu <strong>1236 m. Saulės mūšiu</strong>: pilies įgulos atkaklus pasipriešinimas sulaikė kalavijuočių veržimąsi ir leido lietuvių pajėgoms sutelkti jėgas lemiamam smūgiui. Šiandien nuo piliakalnio aikštelės atsiveria įspūdinga Dubysos slėnio ir tvenkinio panorama, čia vyksta Europos paveldo dienų renginiai ir Baltų vienybės sąšaukos.
-                            </p>
-                            <ul class="place-highlights" aria-label="Bubių piliakalnio ypatybės">
-                                <li>Įrengti patogūs mediniai laiptai ir apžvalgos aikštelė</li>
-                                <li>Svarbi V–XIV a. papėdės senovės gyvenvietė</li>
-                                <li>Panoraminis vaizdas į Dubysos slėnį ir tvenkinį</li>
-                            </ul>
-                        </div>
-                    </article>
-
-                    <!-- 2. Bubių tvenkinys -->
-                    <article class="place-feature place-feature-reverse">
-                        <div class="place-image-wrap">
-                            <img src="images/bubiu-tvenkinys.jpg" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/5/59/Bubiu_tvenkinys.jpg'" alt="Bubių tvenkinys (Bubių jūra) ir žaliuojanti pakrantė vasarą" loading="lazy">
-                            <span class="place-badge">Gamta ir poilsis</span>
-                        </div>
-                        <div class="place-body">
-                            <h3>Bubių tvenkinys („Bubių jūra“)</h3>
-                            <p>
-                                Užtvenkus Dubysos upės aukštupį suformuotas <strong>Bubių tvenkinys</strong> – vienas didžiausių ir vaizdingiausių Šiaulių regiono vandens telkinių, kurio plotas siekia 422 hektarus. Dėl savo platybių gyventojų ir miesto svečių jis meiliai vadinamas <strong>„Bubių jūra“</strong> arba <strong>„Šiaulių jūra“</strong>.
-                            </p>
-                            <p>
-                                Tvenkinys tapo traukos centru aktyvaus laisvalaikio ir ramaus poilsio gamtoje mėgėjams. Jo pakrantėse įrengti paplūdimiai, poilsiavietės, valčių prieplaukos, o vandens platybėse visą sezoną galima išvysti buriuotojus, irklentininkus, baidarininkus bei žvejus.
-                            </p>
-                            <ul class="place-highlights" aria-label="Bubių tvenkinio privalumai">
-                                <li>422 ha vandens platybės buriavimui, irklentėms ir maudynėms</li>
-                                <li>Turtingi žuvų ištekliai mėgėjiškai žūklei visais metų laikais</li>
-                                <li>Sutvarkytos poilsiavietės šalia Kurtuvėnų regioninio parko</li>
-                            </ul>
-                        </div>
-                    </article>
-                </div>
-
-                <!-- Kiti lankytini objektai kortelėse -->
-                <div class="places-cards-grid">
-                    <article class="info-card">
-                        <div class="card-icon" aria-hidden="true">🏛️</div>
-                        <h3>Bubių dvaro sodyba</h3>
-                        <p>
-                            Buvusi grafų Zubovų rezidencija su išlikusiais klasicizmo ir istorizmo bruožų rūmais, parku, ūkiniu kompleksu bei pirmuoju Lietuvoje siloso bokštu. Čia telkėsi XIX a. pab. lietuvių tautinio atgimimo šviesuomenė.
-                        </p>
-                    </article>
-
-                    <article class="info-card">
-                        <div class="card-icon" aria-hidden="true">⚓</div>
-                        <h3>Ventos–Dubysos kanalo žiemos uostas</h3>
-                        <p>
-                            1825–1831 m. kasto perkaso palikimas. Šalia Bubių išlikę kanalo pylimai, perkasos vagos fragmentai ir unikalus keturkampis laivų žiemos uostas, apaugęs šimtamečiais medžiais.
-                        </p>
-                    </article>
-
-                    <article class="info-card">
-                        <div class="card-icon" aria-hidden="true">🥾</div>
-                        <h3>Bubių istorinis pažintinis takas</h3>
-                        <p>
-                            Apie 2,2 km ilgio pėsčiųjų maršrutas, jungiantis grafo Zubovo sodintą ąžuolų alėją, dvaro tvenkinius, kanalo žiemos uostą ir legendinę Gegužinių kalvelę.
-                        </p>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <!-- Sekcija: Bendruomenė -->
-        <section id="bendruomene" class="section section-community">
-            <div class="container">
-                <div class="section-header">
-                    <span class="section-tag">Žmonės ir veikla</span>
-                    <h2>Bubių bendruomenė</h2>
-                    <p class="section-intro">
-                        Bubiai – tai ne tik gamtos ir istorijos paminklai, bet visų pirma čia gyvenantys, kuriantys ir savo kraštą mylintys žmonės.
-                    </p>
-                </div>
-
-                <div class="community-layout">
-                    <div class="community-main">
-                        <h3>Gyvybinga bendruomenė – stiprus kraštas</h3>
-                        <p>
-                            Bubių seniūnijos centre gyvena apie 800 gyventojų, o tvenkinio pakrantėse ir vaizdingose apylinkėse nuolat kuriasi naujos šeimos, vertinančios švarią gamtą, saugią kaimynystę ir patogų susisiekimą su Šiaulių miestu.
-                        </p>
-                        <p>
-                            Miestelio širdyje aktyviai veikia <strong>Bubių mokykla</strong>, <strong>biblioteka</strong>, kultūros įstaigos ir <strong>Bubių kaimo bendruomenė</strong>. Glaudžiai bendradarbiaudami su Kurtuvėnų regioninio parko direkcija ir seniūnija, gyventojai puoselėja viešąsias erdves, organizuoja šventes bei saugo istorinę atmintį.
-                        </p>
-
-                        <div class="pillars-grid">
-                            <div class="pillar-box">
-                                <h4>Kultūra ir tradicijos</h4>
-                                <p>Kasmetinės vasaros šventės, Joninių ir Mindaugo karūnavimo minėjimai ant piliakalnio, literatūriniai vakarai ir parodos.</p>
+                    <div class="featured-places">
+                        <!-- 1. Bubių piliakalnis -->
+                        <article class="place-feature">
+                            <div class="place-image-wrap">
+                                <img src="images/bubiu-piliakalnis.jpg" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/d/d4/Bubiu_piliakalnis.jpg'" alt="Bubių piliakalnis (Pilalė) su stačiais žaliais šlaitais Šiaulių rajone">
+                                <span class="place-badge">Archeologijos paminklas</span>
                             </div>
-                            <div class="pillar-box">
-                                <h4>Švietimas ir jaunimas</h4>
-                                <p>Bubių mokyklos ir bibliotekos edukacinės programos, kraštotyros iniciatyvos, vaikų vasaros stovyklos ir sporto turnyrai.</p>
-                            </div>
-                            <div class="pillar-box">
-                                <h4>Aplinkosauga ir talkos</h4>
-                                <p>Bendruomeninės pavasario talkos „Darom“, Bubių tvenkinio pakrančių, pažintinio tako ir piliakalnio aplinkos tvarkymas.</p>
-                            </div>
-                            <div class="pillar-box">
-                                <h4>Kaimynystė ir savanorystė</h4>
-                                <p>Pagalba vyresnio amžiaus gyventojams, vietos amatininkų ir ūkininkų palaikymas bei atvirumas naujakuriams.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <aside class="community-sidebar" aria-label="Bendruomenės kvietimas">
-                        <div class="sidebar-card">
-                            <img src="images/bubiai-herbas.png" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/d/db/Bubiai_COA.png'" alt="Bubių herbas" class="sidebar-coat" width="72" height="86" loading="lazy">
-                            <h3>Prisijunkite prie mūsų!</h3>
-                            <p>
-                                Kviečiame visus Bubių gyventojus, kraštiečius ir bičiulius įsitraukti į bendruomenės veiklą, siūlyti idėjas gražesniam miesteliui ir dalyvauti renginiuose.
-                            </p>
-                            <div class="events-preview">
-                                <h4>Tradiciniai metų akcentai:</h4>
-                                <ul>
-                                    <li><strong>Gegužė:</strong> Pavasario talka ir Gegužinių tradicijos minėjimas</li>
-                                    <li><strong>Liepa:</strong> Valstybės diena ir Tautiškos giesmės giedojimas ant Bubių piliakalnio</li>
-                                    <li><strong>Rugsėjis:</strong> Europos paveldo dienos ir Baltų vienybės ugnies sąšauka</li>
-                                    <li><strong>Gruodis:</strong> Kalėdinės eglutės įžiebimas ir advento vakaronė</li>
+                            <div class="place-body">
+                                <h3>Bubių piliakalnis (Pilalė)</h3>
+                                <p>
+                                    Dubysos kairiojo kranto aukštumos kyšulyje stūksantis <strong>Bubių piliakalnis</strong> (vietinių vadinamas <em>Pilale</em>) – vienas svarbiausių Šiaulių žemės gynybinių paminklų. Apie 14 metrų aukščio stačiais šlaitais ir pylimais apjuostas kalnas XIII–XIV a. laikė garsiąją <strong>Dubysos pilį</strong>.
+                                </p>
+                                <p>
+                                    Istorikai šią tvirtovę tiesiogiai sieja su pergalingu <strong>1236 m. Saulės mūšiu</strong>: pilies įgulos atkaklus pasipriešinimas sulaikė kalavijuočių veržimąsi ir leido lietuvių pajėgoms sutelkti jėgas lemiamam smūgiui. Šiandien nuo piliakalnio aikštelės atsiveria įspūdinga Dubysos slėnio ir tvenkinio panorama.
+                                </p>
+                                <ul class="place-highlights">
+                                    <li>Įrengti patogūs laiptai ir apžvalgos aikštelė</li>
+                                    <li>Svarbi V–XIV a. papėdės senovės gyvenvietė</li>
+                                    <li>Baltų vienybės ugnies sąšaukų ir paveldo dienų vieta</li>
                                 </ul>
                             </div>
-                            <a href="#kontaktai" class="btn btn-primary btn-full">Susisiekti su bendruomene</a>
+                        </article>
+
+                        <!-- 2. Bubių tvenkinys -->
+                        <article class="place-feature place-feature-reverse">
+                            <div class="place-image-wrap">
+                                <img src="images/bubiu-tvenkinys.jpg" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/5/59/Bubiu_tvenkinys.jpg'" alt="Bubių tvenkinys (Bubių jūra) ir žaliuojanti pakrantė">
+                                <span class="place-badge">Gamta ir poilsis</span>
+                            </div>
+                            <div class="place-body">
+                                <h3>Bubių tvenkinys („Bubių jūra“)</h3>
+                                <p>
+                                    Užtvenkus Dubysos upės aukštupį suformuotas <strong>Bubių tvenkinys</strong> – vienas didžiausių Šiaulių regiono vandens telkinių, kurio plotas siekia 422 hektarus. Dėl savo platybių gyventojų ir miesto svečių jis meiliai vadinamas <strong>„Bubių jūra“</strong> arba <strong>„Šiaulių jūra“</strong>.
+                                </p>
+                                <p>
+                                    Tvenkinio pakrantėse įrengti atnaujinti paplūdimiai, naujas pontoninis lieptas, poilsiavietės ir valčių prieplaukos. Vandens platybėse visą sezoną galima išvysti buriuotojus, irklentininkus, baidarininkus bei žvejus.
+                                </p>
+                                <ul class="place-highlights">
+                                    <li>422 ha vandens platybės buriavimui, irklentėms ir maudynėms</li>
+                                    <li>Atnaujintas Bubių paplūdimys su pontoniniu lieptu ir saulės LED apšvietimu</li>
+                                    <li>Turtingi žuvų ištekliai mėgėjiškai žūklei visais metų laikais</li>
+                                </ul>
+                            </div>
+                        </article>
+                    </div>
+
+                    <!-- Bubių dvaras ir kanalas -->
+                    <div class="places-cards-grid two-col-grid">
+                        <article class="info-card">
+                            <div class="card-icon" aria-hidden="true">🏛️</div>
+                            <h3>Bubių dvaro sodyba</h3>
+                            <p>
+                                Buvusi grafų Zubovų rezidencija su išlikusiais klasicizmo ir istorizmo bruožų rūmais, senuoju parku, tvenkiniais, ūkiniu kompleksu bei pirmuoju Lietuvoje siloso bokštu. Čia telkėsi XIX a. pab. lietuvių tautinio atgimimo šviesuomenė, o šiandien komplekse veikia viešbutis, restoranas, SPA bei dvaro bravoras.
+                            </p>
+                        </article>
+
+                        <article class="info-card">
+                            <div class="card-icon" aria-hidden="true">⚓</div>
+                            <h3>Ventos–Dubysos kanalo žiemos uostas</h3>
+                            <p>
+                                1825–1831 m. kasto strateginio vandens kelio palikimas. Šalia Bubių išlikę kanalo pylimai, perkasos vagos fragmentai ir unikalus keturkampis laivų žiemos uostas, apaugęs šimtamečiais medžiais.
+                            </p>
+                        </article>
+                    </div>
+
+                    <!-- Pažintiniai takai šalia Bubių (Kurtuvėnų regioninis parkas) -->
+                    <div class="trails-block">
+                        <div class="trails-header">
+                            <span class="section-tag">Kurtuvėnų regioninis parkas</span>
+                            <h3>Pažintiniai takai ir gamtos perlas šalia Bubių</h3>
+                            <p>
+                                Bubiai yra tiesioginiai vartai į Kurtuvėnų regioninį parką. Vos už kelių minučių kelio nuo miestelio driekiasi vieni gražiausių Rytų Žemaičių aukštumos pažintinių takų ir gamtos paminklų:
+                            </p>
                         </div>
-                    </aside>
+
+                        <div class="trails-grid">
+                            <article class="trail-card">
+                                <span class="trail-length">2,2 km • Žiedinis maršrutas</span>
+                                <h4>Bubių istorinis pažintinis takas</h4>
+                                <p>
+                                    Prasideda čia pat Bubiuose. Maršrutas jungia 10 stotelių: grafo Zubovo sodintą ąžuolų alėją, dvaro tvenkinius, Ventos–Dubysos kanalo žiemos uostą, legendinę Gegužinių kalvelę ir paukščių stebėjimo bokštelį.
+                                </p>
+                            </article>
+
+                            <article class="trail-card">
+                                <span class="trail-length">4,5 km • Mediniai lieptai per pelkę</span>
+                                <h4>Juodlės pažintinis takas</h4>
+                                <p>
+                                    Ilgos kraštovaizdžio draustinyje aplink šaltiniuotą Juodlės ežerą vingiuojantis takas. Lankytojai eina mediniais lentų takais per aukštapelkės liūną, miško keliukais ir stebi retus paukščius bei augalus.
+                                </p>
+                            </article>
+
+                            <article class="trail-card">
+                                <span class="trail-length">183,4 m virš jūros lygio</span>
+                                <h4>Girnikų šventkalnis</h4>
+                                <p>
+                                    Įspūdinga ledynmečio kalva Bubių seniūnijoje, nuo kurios viršūnės atsiveria plati panorama į Kurtuvėnų miškus, Šiaulius ir Šatrijos kalną. Kasmet rugsėjo 22 d. čia uždegama Baltų vienybės ugnis.
+                                </p>
+                            </article>
+
+                            <article class="trail-card">
+                                <span class="trail-length">Gamtos centras ir dviračių trasos</span>
+                                <h4>Jautmalkė ir Pustlaukio duobė</h4>
+                                <p>
+                                    Jautmalkės gamtos mokykla senajame Žemaitijos kaime ir netoliese esantis Pustlaukio geomorfologinis draustinis su įspūdingomis ledynmečio termokarstinėmis įdubomis („velnio duobėmis“).
+                                </p>
+                            </article>
+                        </div>
+
+                        <!-- Išskirtas informacinis blokas su nuorodomis į map.lisauskai.lt ir lisauskai.lt -->
+                        <div class="external-highlight-banner">
+                            <div class="banner-text">
+                                <h4>🗺️ Ieškote išsamių maršrutų, nuotraukų ir vaizdo įrašų?</h4>
+                                <p>
+                                    Visų aplinkinių Kurtuvėnų regioninio parko ir Bubių krašto pažintinių takų detalius žemėlapius, GPS maršrutus, fotogalerijas bei vaizdo apžvalgas rasite kraštiečių sukurtuose portaluose:
+                                </p>
+                            </div>
+                            <div class="banner-actions">
+                                <a href="https://map.lisauskai.lt" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                                    Atidaryti takų žemėlapį (map.lisauskai.lt) ↗
+                                </a>
+                                <a href="https://lisauskai.lt" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                                    Nuotraukos ir video (lisauskai.lt) ↗
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Sekcija: Dažniausiai užduodami klausimai / Naudinga žinoti -->
-        <section class="section section-faq" aria-labelledby="duk-antraste">
-            <div class="container">
-                <div class="section-header">
-                    <span class="section-tag">Lankytojams ir gyventojams</span>
-                    <h2 id="duk-antraste">Naudinga informacija</h2>
+        <!-- ==================================================================
+             3 SKILTIS: VERSLAS IR PRAMONĖ
+             ================================================================== -->
+        <section id="view-verslas" class="tab-view" role="tabpanel" aria-labelledby="tab-btn-verslas" hidden>
+            <div class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <span class="section-tag">Ekonomika ir paslaugos</span>
+                        <h2>Verslas ir pramonė Bubiuose</h2>
+                        <p class="section-intro">
+                            Bubiai pasižymi stipriu gamybos, inžinerijos, akvakultūros, maisto gamybos ir svetingumo verslų branduoliu.
+                        </p>
+                    </div>
+
+                    <div class="business-grid">
+                        <!-- 1. UAB Hidralteka -->
+                        <article class="business-card featured-business">
+                            <div class="business-card-top">
+                                <span class="business-category">Inžinerija ir gamyba</span>
+                                <span class="business-location">📍 Gluosnių g. 1, Bubiai</span>
+                            </div>
+                            <h3>UAB „Hidralteka“</h3>
+                            <p>
+                                Ilgametę patirtį turinti gamybinė ir techninių paslaugų įmonė Bubiuose. Bendrovė specializuojasi hidraulinės įrangos, hidraulinių manipuliatorių, miškovežių ir krovimo kranų, hidrocilindrų bei specialiosios technikos antstatų gamyboje ir kapitaliniame remonte.
+                            </p>
+                            <ul class="business-tags">
+                                <li>Hidrauliniai manipuliatoriai</li>
+                                <li>Metalo tekinimas ir frezavimas</li>
+                                <li>Technikos remontas</li>
+                            </ul>
+                        </article>
+
+                        <!-- 2. Bubių bravoras -->
+                        <article class="business-card featured-business">
+                            <div class="business-card-top">
+                                <span class="business-category">Kraftinė aludarystė ir edukacijos</span>
+                                <span class="business-location">📍 Dubysos g. 1D, Bubiai</span>
+                            </div>
+                            <h3>„Bubių bravoras“ (Bubių dvaro bravoras)</h3>
+                            <p>
+                                Istoriniame XIX a. Bubių dvaro akmens mūro pastate veikianti kraftinio alaus darykla. Čia atkurtos senosios dvaro aludarystės tradicijos, verdamas gyvas kraftinis alus, rengiamos degustacinės programos ir pažintinės ekskursijos grupėms.
+                            </p>
+                            <ul class="business-tags">
+                                <li>Kraftinio alaus gamyba</li>
+                                <li>Degustacijos ir ekskursijos</li>
+                                <li>Istorinis dvaro paveldas</li>
+                            </ul>
+                        </article>
+
+                        <!-- 3. Šiaulių šamas -->
+                        <article class="business-card featured-business">
+                            <div class="business-card-top">
+                                <span class="business-category">Akvakultūra ir maisto gamyba</span>
+                                <span class="business-location">📍 Gluosnių g. 27, Bubiai</span>
+                            </div>
+                            <h3>„Šiaulių šamas“ (UAB „Verslo lyderiai“)</h3>
+                            <p>
+                                Bubiuose veikiantis gėlųjų vandenų akvakultūros ūkis, kuriame moderniomis sąlygomis auginami afrikiniai šamai. Ūkis tieka šviežią žuvį, šamo filė ir pagal tradicinius receptus natūraliu alksnio dūmu rūkytus šamo gaminius.
+                            </p>
+                            <ul class="business-tags">
+                                <li>Afrikinių šamų auginimas</li>
+                                <li>Karštai rūkyta žuvis</li>
+                                <li>Vietos produkcija</li>
+                            </ul>
+                        </article>
+
+                        <!-- 4. Grafo Zubovo viešbutis ir restoranas -->
+                        <article class="business-card">
+                            <div class="business-card-top">
+                                <span class="business-category">Svetingumas, restoranas ir SPA</span>
+                                <span class="business-location">📍 Dubysos g. 1C, Bubiai</span>
+                            </div>
+                            <h3>„Grafo Zubovo“ viešbutis ir restoranas (Bubių dvaras)</h3>
+                            <p>
+                                Restauruotame XIX a. grafų Zubovų dvaro rūmų komplekse įsikūręs viešbutis, europietiškos virtuvės restoranas su vyno rūsiu, pokylių ir konferencijų salės bei mini SPA erdvė su baseinu ir pirtimis.
+                            </p>
+                            <ul class="business-tags">
+                                <li>Apgyvendinimas ir SPA</li>
+                                <li>Restoranas</li>
+                                <li>Konferencijos ir šventės</li>
+                            </ul>
+                        </article>
+
+                        <!-- 5. UAB Aldauga -->
+                        <article class="business-card">
+                            <div class="business-card-top">
+                                <span class="business-category">Maitinimas ir renginiai</span>
+                                <span class="business-location">📍 Gluosnių g. 15, Bubiai</span>
+                            </div>
+                            <h3>UAB „Aldauga“</h3>
+                            <p>
+                                Bubiuose veikianti maitinimo paslaugų ir renginių aptarnavimo įmonė, teikianti kavinės, banketų, gedulingų pietų ir išvažiuojamojo maitinimo paslaugas vietos gyventojams bei svečiams.
+                            </p>
+                            <ul class="business-tags">
+                                <li>Kavinė ir pietūs</li>
+                                <li>Pobūvių aptarnavimas</li>
+                            </ul>
+                        </article>
+
+                        <!-- 6. Kitos vietos įmonės ir vandens pramogos -->
+                        <article class="business-card">
+                            <div class="business-card-top">
+                                <span class="business-category">Prekyba, paslaugos ir aktyvus poilsis</span>
+                                <span class="business-location">📍 Bubiai, Šiaulių r.</span>
+                            </div>
+                            <h3>UAB „Medavita“, UAB „Sileka“ ir vandens pramogos</h3>
+                            <p>
+                                Bubiuose taip pat sėkmingai dirba medicinos priemonių tiekėja <strong>UAB „Medavita“</strong> (Gluosnių g. 27), gamybos ir paslaugų bendrovė <strong>UAB „Sileka“</strong> (Gluosnių g. 2B), o prie Bubių tvenkinio veikia irklenčių, baidarių nuoma bei buriavimo bazė.
+                            </p>
+                            <ul class="business-tags">
+                                <li>Medicinos įranga</li>
+                                <li>Irklenčių ir baidarių nuoma</li>
+                            </ul>
+                        </article>
+                    </div>
+
+                    <div class="center-cta-box">
+                        <p>Visų pagrindinių Bubių įmonių tikslias vietas galite peržiūrėti interaktyviame miestelio žemėlapyje:</p>
+                        <button type="button" class="btn btn-primary" data-tab-target="zemelapis">Rodyti įmones žemėlapyje →</button>
+                    </div>
                 </div>
+            </div>
+        </section>
 
-                <div class="faq-list">
-                    <details class="faq-item" open>
-                        <summary>Kaip patogiausia atvykti į Bubius?</summary>
-                        <div class="faq-content">
-                            <p>
-                                Bubiai įsikūrę Šiaulių rajone, ties 14-uoju magistralinio kelio <strong>A12 (Šiauliai–Tauragė–Kaliningradas)</strong> kilometru. Automobiliu iš Šiaulių centro kelionė trunka vos 15 minučių, taip pat kursuoja priemiestiniai autobusai bei driekiasi dviračių takas Šiauliai–Bubiai–Kurtuvėnai.
-                            </p>
-                        </div>
-                    </details>
+        <!-- ==================================================================
+             4 SKILTIS: SENIŪNIJA IR MOKYKLA
+             ================================================================== -->
+        <section id="view-seniunija" class="tab-view" role="tabpanel" aria-labelledby="tab-btn-seniunija" hidden>
+            <div class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <span class="section-tag">Viešoji erdvė, švietimas ir kultūra</span>
+                        <h2>Bubių seniūnija, projektai ir mokykla</h2>
+                        <p class="section-intro">
+                            Bubių seniūnijoje nuosekliai atnaujinama viešoji infrastruktūra, puoselėjama poilsio aplinka ir vyksta aktyvus švietimo bei bendruomenės gyvenimas.
+                        </p>
+                    </div>
 
-                    <details class="faq-item">
-                        <summary>Ar Bubių piliakalnis ir pažintinis takas lankomi nemokamai?</summary>
-                        <div class="faq-content">
+                    <div class="seniunija-grid">
+                        <div class="projects-column">
+                            <h3>Seniūnijos infrastruktūros darbai ir projektai</h3>
                             <p>
-                                Taip, tiek Bubių piliakalnis (Pilalė), tiek Bubių istorinis pažintinis takas bei Bubių tvenkinio viešosios poilsiavietės yra atviros ir lankomos nemokamai visą parą, visais metų laikais.
+                                Šiaulių rajono savivaldybė kartu su Bubių seniūnija ir vietos gyventojais įgyvendino svarbius projektus, kurie pagerino gyvenimo kokybę Bubiuose ir poilsio sąlygas prie Bubių tvenkinio:
                             </p>
-                        </div>
-                    </details>
 
-                    <details class="faq-item">
-                        <summary>Kokia žvejyba leidžiama Bubių tvenkinyje?</summary>
-                        <div class="faq-content">
-                            <p>
-                                Bubių tvenkinyje leidžiama mėgėjiška žūklė turint galiojantį žvejo mėgėjo bilietą (ALIS sistemoje). Tvenkinyje sugaunamos lydekos, ešeriai, karšiai, lynai, kuojos ir kitos gėlavandenės žuvys.
-                            </p>
+                            <div class="project-cards">
+                                <article class="project-item">
+                                    <span class="project-status status-done">Įgyvendinta</span>
+                                    <h4>🏖️ Bubių tvenkinio ir Pageluvio paplūdimių atnaujinimas</h4>
+                                    <p>
+                                        Atnaujinta populiariausių seniūnijos maudyklų infrastruktūra: pastatytos naujos persirengimo kabinos, mediniai gultai, suoliukai, įrengti lauko treniruokliai bei smėlio žaidimų aikštelės vaikams.
+                                    </p>
+                                </article>
+
+                                <article class="project-item">
+                                    <span class="project-status status-done">Dalyvaujamasis biudžetas</span>
+                                    <h4>🛶 Projektas „Vandens kelias“ – naujas pontoninis lieptas</h4>
+                                    <p>
+                                        Bendruomenės narių iniciatyva ir gyventojų balsais laimėto dalyvaujamojo biudžeto projekto dėka Bubių tvenkinyje įrengtas modernus pontoninis lieptas poilsiautojams, maudynėms ir irklenčių mėgėjams.
+                                    </p>
+                                </article>
+
+                                <article class="project-item">
+                                    <span class="project-status status-done">Saugumas ir ekologija</span>
+                                    <h4>☀️ Saulės energijos LED apšvietimas ir takai</h4>
+                                    <p>
+                                        Bubių paplūdimio ir poilsio zonose įrengti autonominiai saulės energiją naudojantys LED šviestuvai, nuolat prižiūrimas dviračių ir pėsčiųjų takas Šiauliai–Bubiai–Kurtuvėnai bei atnaujinamas gyvenvietės gatvių apšvietimas.
+                                    </p>
+                                </article>
+                            </div>
                         </div>
-                    </details>
+
+                        <div class="school-column">
+                            <div class="school-card">
+                                <span class="section-tag">Švietimas ir bendruomenė</span>
+                                <h3>Bubių mokykla ir bendruomenės renginiai</h3>
+                                <p>
+                                    Miestelio kultūrinis ir švietimo židinys – <strong>Šiaulių r. Bubių mokykla</strong>, biblioteka ir aktyvi <strong>Bubių kaimo bendruomenė</strong>. Čia susitinka visos gyventojų kartos: vyksta Rugsėjo 1-osios ir mokslo metų šventės, kalėdiniai renginiai, kūrybinės dirbtuvės, sporto varžybos, pavasario talkos bei Valstybės dienos minėjimai ant Bubių piliakalnio.
+                                </p>
+
+                                <div class="pillars-grid compact-pillars">
+                                    <div class="pillar-box">
+                                        <h4>Mokykla ir edukacijos</h4>
+                                        <p>Pradinis ir pagrindinis ugdymas, gamtamokslinės pamokos Kurtuvėnų regioniniame parke bei kraštotyros būreliai.</p>
+                                    </div>
+                                    <div class="pillar-box">
+                                        <h4>Kultūros tradicijos</h4>
+                                        <p>Valstybinių švenčių minėjimai, Baltų vienybės ugnies sąšauka, vasaros šventės ir bendruomenės vakaronės.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Aiškus kvietimas ir mygtukas į lisauskai.lt vaizdo įrašams -->
+                                <div class="video-archive-box">
+                                    <h4>🎬 Mokyklos švenčių ir bendruomenės renginių vaizdo įrašai</h4>
+                                    <p>
+                                        Norite prisiminti gražiausias Bubių mokyklos švenčių akimirkas, koncertus ir bendruomenės susibūrimus? Vaizdo įrašus ir fotoreportažus iš Bubių mokyklos bei miestelio renginių galite peržiūrėti portale <strong>lisauskai.lt</strong>:
+                                    </p>
+                                    <a href="https://lisauskai.lt" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-full">
+                                        Žiūrėti švenčių ir renginių vaizdo įrašus (lisauskai.lt) ↗
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================================================================
+             5 SKILTIS: ŽEMĖLAPIS IR KONTAKTAI
+             ================================================================== -->
+        <section id="view-zemelapis" class="tab-view" role="tabpanel" aria-labelledby="tab-btn-zemelapis" hidden>
+            <div class="section">
+                <div class="container">
+                    <div class="section-header">
+                        <span class="section-tag">Interaktyvi navigacija ir ryšys</span>
+                        <h2>Bubių žemėlapis ir kontaktai</h2>
+                        <p class="section-intro">
+                            Spustelėkite ant žymeklio žemėlapyje arba pasirinkite objektą iš sąrašo, kad pamatytumėte tikslią jo vietą Bubiuose.
+                        </p>
+                    </div>
+
+                    <!-- Greito pasirinkimo mygtukai žemėlapio žymekliams -->
+                    <div class="map-Selector-bar" aria-label="Greitas objektų pasirinkimas žemėlapyje">
+                        <button type="button" class="map-pin-btn" data-marker-index="0">⛰️ Bubių piliakalnis</button>
+                        <button type="button" class="map-pin-btn" data-marker-index="1">🏖️ Bubių paplūdimys</button>
+                        <button type="button" class="map-pin-btn" data-marker-index="2">🏫 Bubių mokykla</button>
+                        <button type="button" class="map-pin-btn" data-marker-index="3">🏛️ Bubių dvaras</button>
+                        <button type="button" class="map-pin-btn" data-marker-index="4">⚙️ UAB „Hidralteka“</button>
+                        <button type="button" class="map-pin-btn" data-marker-index="5">🍺 „Bubių bravoras“</button>
+                        <button type="button" class="map-pin-btn" data-marker-index="6">🐟 „Šiaulių šamas“</button>
+                    </div>
+
+                    <div class="map-contact-grid">
+                        <div class="map-wrapper">
+                            <div id="bubiaiMap" class="leaflet-map-container" aria-label="Interaktyvus Bubių miestelio žemėlapis"></div>
+                        </div>
+
+                        <div class="contact-card">
+                            <h3>Susisiekite su mumis</h3>
+                            <p>
+                                Turite klausimų apie Bubių bendruomenę, vietos iniciatyvas, renginius ar norite papildyti informaciją svetainėje? Parašykite mums tiesiogiai:
+                            </p>
+
+                            <ul class="contact-details-list">
+                                <li>
+                                    <span class="contact-label">El. paštas tiesioginiam ryšiui:</span>
+                                    <a href="mailto:tomas@lisauskai.lt" class="contact-email-link">tomas@lisauskai.lt</a>
+                                </li>
+                                <li>
+                                    <span class="contact-label">Adresas:</span>
+                                    <span>Bubiai, Bubių sen., LT-80200 Šiaulių r. sav.</span>
+                                </li>
+                                <li>
+                                    <span class="contact-label">Geografinės koordinatės:</span>
+                                    <span>55.858° š. pl., 23.133° r. ilg. (prie kelio A12 Šiauliai–Tauragė)</span>
+                                </li>
+                                <li>
+                                    <span class="contact-label">Susiję krašto projektai:</span>
+                                    <div class="contact-project-links">
+                                        <a href="https://map.lisauskai.lt" target="_blank" rel="noopener noreferrer">map.lisauskai.lt (Takų žemėlapis) ↗</a>
+                                        <a href="https://lisauskai.lt" target="_blank" rel="noopener noreferrer">lisauskai.lt (Foto ir video archyvas) ↗</a>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <a href="mailto:tomas@lisauskai.lt" class="btn btn-primary btn-full">Parašyti el. laišką (tomas@lisauskai.lt)</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Poraštė / Kontaktai -->
+    <!-- Poraštė (Footer) -->
     <footer id="kontaktai" class="site-footer">
         <div class="container">
             <div class="footer-grid">
@@ -339,27 +634,28 @@
                         <span>bubiai.eu</span>
                     </div>
                     <p class="footer-desc">
-                        Bubių miestelio ir bendruomenės informacinė svetainė. Saugome Šiaulių žemės paveldą, Dubysos slėnio gamtą ir kuriame jaukią kaimynystę.
+                        Bubių miestelio ir bendruomenės informacinė svetainė. Saugome Šiaulių žemės paveldą, Dubysos slėnio gamtą, remiame vietos verslą ir kuriame jaukią kaimynystę.
                     </p>
                 </div>
 
                 <div class="footer-col">
-                    <h3>Greitos nuorodos</h3>
+                    <h3>Svetainės skiltys</h3>
                     <ul class="footer-links">
-                        <li><a href="#apie-bubius">Apie Bubius ir istorija</a></li>
-                        <li><a href="#lankytinos-vietos">Bubių piliakalnis ir tvenkinys</a></li>
-                        <li><a href="#bendruomene">Bendruomenės veikla</a></li>
-                        <li><a href="#virsus">Grįžti į puslapio viršų ↑</a></li>
+                        <li><a href="#pradzia" data-tab-target="pradzia">Pradžia ir Apie</a></li>
+                        <li><a href="#vietos" data-tab-target="vietos">Lankytinos vietos ir Takai</a></li>
+                        <li><a href="#verslas" data-tab-target="verslas">Verslas ir Pramonė</a></li>
+                        <li><a href="#seniunija" data-tab-target="seniunija">Seniūnija ir Mokykla</a></li>
+                        <li><a href="#zemelapis" data-tab-target="zemelapis">Žemėlapis ir Kontaktai</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-col">
-                    <h3>Kontaktai ir vieta</h3>
+                    <h3>Kontaktai ir nuorodos</h3>
                     <ul class="footer-contact">
-                        <li><strong>Adresas:</strong> Bubiai, Bubių sen., LT-80200 Šiaulių r. sav.</li>
-                        <li><strong>Koordinatės:</strong> 55.856° š. pl., 23.127° r. ilg.</li>
-                        <li><strong>El. paštas:</strong> <a href="mailto:info@bubiai.eu">info@bubiai.eu</a></li>
-                        <li><strong>Svetainė:</strong> <a href="https://bubiai.eu">www.bubiai.eu</a></li>
+                        <li><strong>Vieta:</strong> Bubiai, Bubių sen., LT-80200 Šiaulių r. sav.</li>
+                        <li><strong>El. paštas:</strong> <a href="mailto:tomas@lisauskai.lt">tomas@lisauskai.lt</a></li>
+                        <li><strong>Pažintiniai takai:</strong> <a href="https://map.lisauskai.lt" target="_blank" rel="noopener noreferrer">map.lisauskai.lt</a></li>
+                        <li><strong>Renginių archyvas:</strong> <a href="https://lisauskai.lt" target="_blank" rel="noopener noreferrer">lisauskai.lt</a></li>
                     </ul>
                 </div>
             </div>
@@ -367,12 +663,14 @@
             <div class="footer-bottom">
                 <p>&copy; <span id="currentYear">2026</span> Bubiai (bubiai.eu). Visos teisės saugomos.</p>
                 <p class="footer-credits">
-                    Nuotraukos: „Wikimedia Commons“ (aut. Lazdynas, Vilensija – CC BY-SA 3.0; R. Lazdynas – Public Domain).
+                    Nuotraukos: „Wikimedia Commons“ (aut. Lazdynas, Vilensija – CC BY-SA 3.0; R. Lazdynas – Public Domain) • Orų duomenys: Open-Meteo.
                 </p>
             </div>
         </div>
     </footer>
 
+    <!-- Leaflet.js biblioteka -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="script.js"></script>
 </body>
 </html>
